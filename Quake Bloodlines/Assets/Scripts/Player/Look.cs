@@ -10,6 +10,8 @@ public class Look : MonoBehaviour
     private Transform player;
     [SerializeField]
     private Transform cams;
+    [SerializeField]
+    private Transform weapon;
 
     private Quaternion camCentre;
 
@@ -40,6 +42,8 @@ public class Look : MonoBehaviour
         {
             cams.localRotation = temp_Delta;
         }
+
+        weapon.rotation = cams.rotation;
     }
 
     void SetX()
