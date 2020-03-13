@@ -1,16 +1,14 @@
 fileFormatVersion: 2
-guid: 987bad7c62d6f9e41a44dcc7f4e35c86
+guid: cbd603929ea5da743910d8f527719742
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Worn_Green_ucekbfgcw
-    2100002: Rusted_Metal_tjylcjvn
-    2100004: Light
+    2100000: No Name
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cylinder
+    4300000: Cube
   externalObjects: {}
   materials:
     importMaterials: 1
