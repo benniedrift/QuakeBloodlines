@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Motion : MonoBehaviour
 {
+    #region Variables
+
     [SerializeField]
     private float speed;
     private Rigidbody rig;
@@ -11,7 +13,12 @@ public class Motion : MonoBehaviour
     private float sprintModifier;
     [SerializeField]
     private Camera normalCam;
+    [SerializeField]
+    private Transform weaponParent;
+
     private float baseFOV;
+    private Vector3 weaponParentOrigin;
+
     [SerializeField]
     private float sprintFOV = 1.25f;
     [SerializeField]
@@ -21,11 +28,38 @@ public class Motion : MonoBehaviour
     [SerializeField]
     private Transform groundDetector;
 
+    #endregion
+
+    #region Monobehaviour Callbacks
+
     private void Start()
     {
         baseFOV = normalCam.fieldOfView;
         Camera.main.enabled = false;
         rig = GetComponent<Rigidbody>();
+        weaponParentOrigin = weaponParent.localPosition;
+    }
+
+    private void Update()
+    {
+        //axis
+        float temp_Hmove = Input.GetAxisRaw("Horizontal");
+        float temp_Vmove = Input.GetAxisRaw("Vertical");
+
+        //controls
+        bool temp_sprint = Input.GetKey(KeyCode.LeftShift);
+        bool temp_jump = Input.GetKeyDown(KeyCode.Space);
+
+        //states
+        bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
+        bool isJumping = temp_jump && isGrounded;
+        bool isSprinting = temp_sprint && temp_Vmove > 0 && !isJumping && isGrounded;
+
+        //jjumping
+        if (isJumping)
+        {
+            rig.AddForce(Vector3.up * jumpForce);
+        }
     }
 
     private void FixedUpdate()
@@ -42,12 +76,6 @@ public class Motion : MonoBehaviour
         bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
         bool isJumping = temp_jump && isGrounded;
         bool isSprinting = temp_sprint && temp_Vmove > 0 && !isJumping && isGrounded;
-
-        //jjumping
-        if(isJumping)
-        {
-            rig.AddForce(Vector3.up * jumpForce);
-        }
 
         //movement
         Vector3 temp_direction = new Vector3(temp_Hmove, 0, temp_Vmove);
@@ -70,4 +98,15 @@ public class Motion : MonoBehaviour
             normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV, Time.deltaTime * 8f);
         }
     }
+
+    #endregion
+
+    #region Private Methods
+
+    void HeadBob(float p_z, float p_xIntensity, float p_yIntensity)
+    {
+        weaponParent.localPosition = new Vector3 (Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z) * p_yIntensity, weaponParentOrigin.z);
+    }
+
+    #endregion
 }

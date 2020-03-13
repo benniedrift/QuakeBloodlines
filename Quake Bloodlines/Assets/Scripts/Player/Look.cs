@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Look : MonoBehaviour
 {
+    #region Variables
+
     public static bool cursorLocked = true;
 
     [SerializeField]
@@ -19,6 +21,10 @@ public class Look : MonoBehaviour
     public float ySensitivty;
     public float maxAngle;
 
+    #endregion
+
+    #region Monobehaviour Callbacks
+    
     private void Start()
     {
         camCentre = cams.localRotation;
@@ -31,6 +37,10 @@ public class Look : MonoBehaviour
 
         LockCursor();
     }
+
+    #endregion
+
+    #region Private Methods
 
     void SetY()
     {
@@ -78,4 +88,6 @@ public class Look : MonoBehaviour
             }
         }
     }
+
+    #endregion
 }
