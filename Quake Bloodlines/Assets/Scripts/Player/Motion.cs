@@ -10,15 +10,16 @@ public class Motion : MonoBehaviour
 
     private void Start()
     {
+        Camera.main.enabled = false;
         rig = GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
     {
-        float temp_Hmove = Input.GetAxis("Horizontal");
-        float temp_Vmove = Input.GetAxis("Vertical");
+        float temp_Hmove = Input.GetAxisRaw("Horizontal");
+        float temp_Vmove = Input.GetAxisRaw("Vertical");
 
-        Vector2 temp_direction = new Vector2(temp_Hmove, temp_Vmove);
+        Vector3 temp_direction = new Vector3(temp_Hmove, 0, temp_Vmove);
         temp_direction.Normalize();
 
         rig.velocity = transform.TransformDirection(temp_direction) * speed * Time.deltaTime;
