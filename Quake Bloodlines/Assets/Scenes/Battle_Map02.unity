@@ -267,7 +267,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 99380069}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Guns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 160594505}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cameras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -432,7 +432,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 247684779}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Misc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 275351849}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FBX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,7 +494,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 299851996}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Assualt Riffle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -526,7 +526,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 320983503}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -719,7 +719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 569549333}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: hip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -780,7 +780,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 611091604}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: States
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -887,7 +887,7 @@ GameObject:
   - component: {fileID: 661022825}
   - component: {fileID: 661022828}
   - component: {fileID: 661022827}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -962,7 +962,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 688750680}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: utility
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1114,7 +1114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 931646419}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Design
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1145,7 +1145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 947554477}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GroundDetect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1182,7 +1182,7 @@ GameObject:
   - component: {fileID: 1009328318}
   - component: {fileID: 1009328320}
   - component: {fileID: 1009328321}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Playerr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1280,7 +1280,7 @@ MonoBehaviour:
   speed: 500
   sprintModifier: 2
   normalCam: {fileID: 1291015809}
-  weaponParent: {fileID: 0}
+  weaponParent: {fileID: 299851996}
   sprintFOV: 1.25
   jumpForce: 1000
   ground:
@@ -1336,6 +1336,11 @@ MonoBehaviour:
   loadout:
   - {fileID: 11400000, guid: 9bb7421deab3e8942bb6a4f95f97e200, type: 2}
   weaponParent: {fileID: 275351849}
+  bulletHolePrefab: {fileID: 2693164484848795744, guid: 6d8c1d78275b26c4c9e79191042ae0d5,
+    type: 3}
+  canBeShot:
+    serializedVersion: 2
+    m_Bits: 823
 --- !u!1 &1104906288
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,7 +1589,7 @@ GameObject:
   - component: {fileID: 1291015807}
   - component: {fileID: 1291015809}
   - component: {fileID: 1291015808}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Normal Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1933,7 +1938,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1755261310}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ADS
   m_TagString: Untagged
   m_Icon: {fileID: 0}

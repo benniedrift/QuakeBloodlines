@@ -21,9 +21,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 100000, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 100014, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
       propertyPath: m_Name
       value: Gun Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 100014, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 281fef707c700af4698a6ca3e58d0bcb, type: 3}
       propertyPath: m_LocalRotation.x

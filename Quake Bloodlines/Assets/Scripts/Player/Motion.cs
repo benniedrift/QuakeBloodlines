@@ -28,6 +28,10 @@ public class Motion : MonoBehaviour
     [SerializeField]
     private Transform groundDetector;
 
+    private float movementCounter;
+    private float idleCounter;
+    private Vector3 targetWeaponBobPosition;
+
     #endregion
 
     #region Monobehaviour Callbacks
@@ -59,6 +63,26 @@ public class Motion : MonoBehaviour
         if (isJumping)
         {
             rig.AddForce(Vector3.up * jumpForce);
+        }
+
+        //headbob
+        if(temp_Hmove == 0 && temp_Vmove ==0)
+        {
+            HeadBob(idleCounter, 0.025f, 0.025f);
+            idleCounter += Time.deltaTime;
+            weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
+        }
+        else if(!isSprinting)
+        {
+            HeadBob(movementCounter, 0.035f, 0.035f);
+            movementCounter += Time.deltaTime * 5;
+            weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 6f);
+        }
+        else
+        {
+            HeadBob(movementCounter, 0.05f, 0.08f);
+            movementCounter += Time.deltaTime * 7;
+            weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 10f);
         }
     }
 
@@ -105,7 +129,7 @@ public class Motion : MonoBehaviour
 
     void HeadBob(float p_z, float p_xIntensity, float p_yIntensity)
     {
-        weaponParent.localPosition = new Vector3 (Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z) * p_yIntensity, weaponParentOrigin.z);
+        targetWeaponBobPosition = weaponParentOrigin = new Vector3 (Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z * 2) * p_yIntensity, 0);
     }
 
     #endregion
