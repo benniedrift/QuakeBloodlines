@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviourPunCallbacks
 {
     #region Variables
 
@@ -17,6 +18,7 @@ public class Weapon : MonoBehaviour
 
     private GameObject currentWeapon;
     private int currentIndex;
+    private float currentCooldown = 0f;
 
     #endregion
 
@@ -24,20 +26,32 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Equip(0);
         }
 
         if(currentWeapon != null)
         {
-            if(Input.GetMouseButtonDown(0))
+            if(Input.GetMouseButtonDown(0) && currentCooldown <= 0)
             {
                 Shoot();
             }
 
             //weapon position elasticity
             currentWeapon.transform.localPosition = Vector3.Lerp(currentWeapon.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
+            currentWeapon.transform.localRotation = Quaternion.Lerp(currentWeapon.transform.localRotation, Quaternion.identity, Time.deltaTime * 4f);
+
+            //Firerate
+            if (currentCooldown > 0)
+            {
+                currentCooldown -= Time.deltaTime;
+            }
         }
     }
 
@@ -83,7 +97,10 @@ public class Weapon : MonoBehaviour
 
         //gun fx
         currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
-        currentWeapon.transform.position -= currentWeapon.transform.position * loadout[currentIndex].kickback;
+        currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
+
+        //firerate
+        currentCooldown = loadout[currentIndex].fireRate;
     }
 
     #endregion

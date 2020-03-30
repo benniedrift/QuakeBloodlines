@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AssualtRiffle
   m_EditorClassIdentifier: 
   name: Heavy
-  fireRate: 300
+  fireRate: 0.2
   bloom: 20
   recoil: 10
   kickback: 0.1

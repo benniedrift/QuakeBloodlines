@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Motion : MonoBehaviour
+public class Motion : MonoBehaviourPunCallbacks
 {
     #region Variables
 
@@ -13,6 +14,8 @@ public class Motion : MonoBehaviour
     private float sprintModifier;
     [SerializeField]
     private Camera normalCam;
+    [SerializeField]
+    private GameObject cameraParent;
     [SerializeField]
     private Transform weaponParent;
 
@@ -38,6 +41,8 @@ public class Motion : MonoBehaviour
 
     private void Start()
     {
+        cameraParent.SetActive(photonView.IsMine);
+
         baseFOV = normalCam.fieldOfView;
         Camera.main.enabled = false;
         rig = GetComponent<Rigidbody>();
@@ -46,6 +51,11 @@ public class Motion : MonoBehaviour
 
     private void Update()
     {
+        if(!photonView.IsMine)
+        {
+            return;
+        }
+
         //axis
         float temp_Hmove = Input.GetAxisRaw("Horizontal");
         float temp_Vmove = Input.GetAxisRaw("Vertical");
@@ -88,6 +98,11 @@ public class Motion : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         //axis
         float temp_Hmove = Input.GetAxisRaw("Horizontal");
         float temp_Vmove = Input.GetAxisRaw("Vertical");

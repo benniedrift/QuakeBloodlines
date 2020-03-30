@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Sway : MonoBehaviour
+public class Sway : MonoBehaviourPunCallbacks
 {
     #region Variables
 
@@ -24,6 +25,11 @@ public class Sway : MonoBehaviour
 
     private void Update()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         UpdateSway();
     }
 
