@@ -19,9 +19,6 @@ public class Motion : MonoBehaviourPunCallbacks
     [SerializeField]
     private Transform weaponParent;
 
-    private float baseFOV;
-    private Vector3 weaponParentOrigin;
-
     [SerializeField]
     private float sprintFOV = 1.25f;
     [SerializeField]
@@ -30,10 +27,17 @@ public class Motion : MonoBehaviourPunCallbacks
     private LayerMask ground;
     [SerializeField]
     private Transform groundDetector;
+    [SerializeField]
+    private int maxHealth;
 
     private float movementCounter;
     private float idleCounter;
+    private int currentHealth;
     private Vector3 targetWeaponBobPosition;
+    private float baseFOV;
+    private Vector3 weaponParentOrigin;
+
+    private GameManger manager;
 
     #endregion
 
@@ -41,7 +45,14 @@ public class Motion : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        currentHealth = maxHealth;
+
         cameraParent.SetActive(photonView.IsMine);
+
+        if(!photonView.IsMine)
+        {
+            gameObject.layer = 12;
+        }
 
         baseFOV = normalCam.fieldOfView;
         Camera.main.enabled = false;
@@ -145,6 +156,28 @@ public class Motion : MonoBehaviourPunCallbacks
     void HeadBob(float p_z, float p_xIntensity, float p_yIntensity)
     {
         targetWeaponBobPosition = weaponParentOrigin = new Vector3 (Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z * 2) * p_yIntensity, 0);
+    }
+
+    #endregion
+
+    #region Internal and Public Methods
+
+    //heath and damage are integers as they take up less space and send the information faster over the internet for huge lobbys and MMO shooters.
+    internal void TakeDamage(int p_damage)
+    {
+        if (photonView.IsMine)
+        {
+            currentHealth -= p_damage;
+            Debug.Log(currentHealth);
+        }
+
+        //DIE
+        if(currentHealth <= 0)
+        {
+            manager.Spawn();
+            PhotonNetwork.Destroy(gameObject);
+            Debug.Log("ENEMY DIED");
+        }
     }
 
     #endregion

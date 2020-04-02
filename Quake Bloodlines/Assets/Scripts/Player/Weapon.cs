@@ -33,14 +33,15 @@ public class Weapon : MonoBehaviourPunCallbacks
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Equip(0);
+            //photonView.RPC(RPC string name, RPC traget, first parameter, second parameter etc...);
+            photonView.RPC("Equip", RpcTarget.All, 0);
         }
 
         if(currentWeapon != null)
         {
             if(Input.GetMouseButtonDown(0) && currentCooldown <= 0)
             {
-                Shoot();
+                photonView.RPC("Shoot", RpcTarget.All);
             }
 
             //weapon position elasticity
@@ -59,6 +60,7 @@ public class Weapon : MonoBehaviourPunCallbacks
 
     #region Private Methods
 
+    [PunRPC]
     void Equip(int p_ind)
     {
         if(currentWeapon != null)
@@ -71,10 +73,12 @@ public class Weapon : MonoBehaviourPunCallbacks
         GameObject temp_newWeapon = Instantiate(loadout[p_ind].prefab, weaponParent.position, weaponParent.rotation, weaponParent) as GameObject;
         temp_newWeapon.transform.localPosition = Vector3.zero;
         temp_newWeapon.transform.localEulerAngles = Vector3.zero;
+        temp_newWeapon.GetComponent<Sway>().isMine = photonView.IsMine;
 
         currentWeapon = temp_newWeapon;
     }
 
+    [PunRPC]
     private void Shoot ()
     {
         Transform temp_Spawn = transform.Find("Cameras/Normal Camera");
@@ -93,6 +97,18 @@ public class Weapon : MonoBehaviourPunCallbacks
             GameObject temp_NewBulletHole = Instantiate(bulletHolePrefab, temp_Hit.point + temp_Hit.normal * 0.001f, Quaternion.identity) as GameObject;
             temp_NewBulletHole.transform.LookAt(temp_Hit.point + temp_Hit.normal);
             Destroy(temp_NewBulletHole, 5f);
+
+            if(photonView.IsMine)
+            {
+                //if shootign a player
+                if(temp_Hit.collider.gameObject.layer == 12)
+                {
+                    //photonView.RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage); - throws error
+                    //FIXED by adding the raycast from the gun - used IsMine and damaged the player that was doing the shooting
+                    //RPC call for damaging enemy player if hit
+                    temp_Hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
+                }
+            }
         }
 
         //gun fx
@@ -101,6 +117,12 @@ public class Weapon : MonoBehaviourPunCallbacks
 
         //firerate
         currentCooldown = loadout[currentIndex].fireRate;
+    }
+
+    [PunRPC]
+    private void TakeDamage(int p_damage)
+    {
+        GetComponent<Motion>().TakeDamage(p_damage);
     }
 
     #endregion

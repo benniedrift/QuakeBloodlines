@@ -5,18 +5,32 @@ using Photon.Pun;
 
 public class GameManger : MonoBehaviour
 {
+    #region Variables
+
     [SerializeField]
     private string playerPrefab;
     [SerializeField]
-    private Transform spawnPoint;
+    private Transform[] spawnPoints;
+
+    #endregion
+
+    #region Monobehaviour Callbacks
 
     private void Start()
     {
         Spawn();
     }
 
-    private void Spawn()
+    #endregion
+
+    #region Internal and Public methods
+
+    internal void Spawn()
     {
-        PhotonNetwork.Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+        //spawns random
+        Transform temp_spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        PhotonNetwork.Instantiate(playerPrefab, temp_spawn.position, temp_spawn.rotation);
     }
+
+    #endregion
 }

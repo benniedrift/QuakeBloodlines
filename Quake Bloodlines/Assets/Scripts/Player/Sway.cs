@@ -11,6 +11,8 @@ public class Sway : MonoBehaviourPunCallbacks
     private float intensity;
     [SerializeField]
     private float smooth;
+    //isMine referenced in weapon-class equip-method 
+    internal bool isMine;
 
     private Quaternion origin_Rotation;
 
@@ -42,6 +44,12 @@ public class Sway : MonoBehaviourPunCallbacks
         //controls
         float temp_xMouse = Input.GetAxis("Mouse X");
         float temp_yMouse = Input.GetAxis("Mouse Y");
+
+        if(!isMine)
+        {
+            temp_xMouse = 0;
+            temp_yMouse = 0;
+        }
 
         //calc target rotation
         Quaternion temp_xAdjustment = Quaternion.AngleAxis(-intensity * temp_xMouse, Vector3.up);
