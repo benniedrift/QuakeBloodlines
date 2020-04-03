@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Motion : MonoBehaviourPunCallbacks
+public class Player : MonoBehaviourPunCallbacks
 {
     #region Variables
 
@@ -18,7 +18,6 @@ public class Motion : MonoBehaviourPunCallbacks
     private GameObject cameraParent;
     [SerializeField]
     private Transform weaponParent;
-
     [SerializeField]
     private float sprintFOV = 1.25f;
     [SerializeField]
@@ -28,14 +27,15 @@ public class Motion : MonoBehaviourPunCallbacks
     [SerializeField]
     private Transform groundDetector;
     [SerializeField]
-    private int maxHealth;
+    private float maxHealth;
 
     private float movementCounter;
     private float idleCounter;
-    private int currentHealth;
+    private float currentHealth;
     private Vector3 targetWeaponBobPosition;
     private float baseFOV;
     private Vector3 weaponParentOrigin;
+    private Transform hpBar;
 
     private GameManger manager;
 
@@ -58,6 +58,12 @@ public class Motion : MonoBehaviourPunCallbacks
         Camera.main.enabled = false;
         rig = GetComponent<Rigidbody>();
         weaponParentOrigin = weaponParent.localPosition;
+
+        if (photonView.IsMine)
+        {
+            hpBar = GameObject.Find("HUD/Health/Bar").transform;
+            HealthBar();
+        }
     }
 
     private void Update()
@@ -86,6 +92,14 @@ public class Motion : MonoBehaviourPunCallbacks
             rig.AddForce(Vector3.up * jumpForce);
         }
 
+        // FOR TESTING ONLY REMOVE LATER ------------------------
+        //take damage when pressing 'u'
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            TakeDamage(100);
+        }
+        //-------------------------------------------------------
+
         //headbob
         if(temp_Hmove == 0 && temp_Vmove ==0)
         {
@@ -105,6 +119,9 @@ public class Motion : MonoBehaviourPunCallbacks
             movementCounter += Time.deltaTime * 7;
             weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 10f);
         }
+
+        //ui refresh
+        HealthBar();
     }
 
     private void FixedUpdate()
@@ -158,17 +175,25 @@ public class Motion : MonoBehaviourPunCallbacks
         targetWeaponBobPosition = weaponParentOrigin = new Vector3 (Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z * 2) * p_yIntensity, 0);
     }
 
+    void HealthBar()
+    {
+        float temp_healthRatio = currentHealth / maxHealth;
+        hpBar.localScale = Vector3.Lerp(hpBar.localScale, new Vector3(temp_healthRatio, 1, 1), Time.deltaTime * 12f);
+    }
+
     #endregion
 
     #region Internal and Public Methods
 
     //heath and damage are integers as they take up less space and send the information faster over the internet for huge lobbys and MMO shooters.
-    internal void TakeDamage(int p_damage)
+    //changed to float due to needing it for filling the hp bar smoothly
+    internal void TakeDamage(float p_damage)
     {
         if (photonView.IsMine)
         {
             currentHealth -= p_damage;
             Debug.Log(currentHealth);
+            HealthBar();
         }
 
         //DIE

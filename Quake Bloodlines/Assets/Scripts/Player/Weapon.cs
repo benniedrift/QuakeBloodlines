@@ -26,12 +26,7 @@ public class Weapon : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (photonView.IsMine && Input.GetKeyDown(KeyCode.Alpha1))
         {
             //photonView.RPC(RPC string name, RPC traget, first parameter, second parameter etc...);
             photonView.RPC("Equip", RpcTarget.All, 0);
@@ -39,20 +34,23 @@ public class Weapon : MonoBehaviourPunCallbacks
 
         if(currentWeapon != null)
         {
-            if(Input.GetMouseButtonDown(0) && currentCooldown <= 0)
+            if (photonView.IsMine)
             {
-                photonView.RPC("Shoot", RpcTarget.All);
+                if (Input.GetMouseButtonDown(0) && currentCooldown <= 0)
+                {
+                    photonView.RPC("Shoot", RpcTarget.All);
+                }
+
+                //Firerate
+                if (currentCooldown > 0)
+                {
+                    currentCooldown -= Time.deltaTime;
+                }
             }
 
             //weapon position elasticity
             currentWeapon.transform.localPosition = Vector3.Lerp(currentWeapon.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
             currentWeapon.transform.localRotation = Quaternion.Lerp(currentWeapon.transform.localRotation, Quaternion.identity, Time.deltaTime * 4f);
-
-            //Firerate
-            if (currentCooldown > 0)
-            {
-                currentCooldown -= Time.deltaTime;
-            }
         }
     }
 
@@ -120,9 +118,9 @@ public class Weapon : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void TakeDamage(int p_damage)
+    private void TakeDamage(float p_damage)
     {
-        GetComponent<Motion>().TakeDamage(p_damage);
+        GetComponent<Player>().TakeDamage(p_damage);
     }
 
     #endregion

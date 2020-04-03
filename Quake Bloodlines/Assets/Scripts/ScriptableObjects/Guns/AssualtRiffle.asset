@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185ea2d950eae0740a280605e4ce23af, type: 3}
   m_Name: AssualtRiffle
   m_EditorClassIdentifier: 
-  name: Heavy
+  name: Pistol
   damage: 100
   fireRate: 0.2
   bloom: 20
