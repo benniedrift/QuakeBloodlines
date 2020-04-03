@@ -19,3 +19,6 @@ MonoBehaviour:
   recoil: 10
   kickback: 0.1
   prefab: {fileID: 1823954056116451200, guid: 180ac8a0df2eec2459a3fe54bf04c608, type: 3}
+  ammo: 35
+  clipsize: 8
+  reloadTime: 1
