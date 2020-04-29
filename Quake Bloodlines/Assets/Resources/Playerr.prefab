@@ -341,7 +341,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   groundDetector: {fileID: 2873169317885072058}
-  maxHealth: 1000
+  maxHealth: 200
 --- !u!114 &2873169317820955351
 MonoBehaviour:
   m_ObjectHideFlags: 0

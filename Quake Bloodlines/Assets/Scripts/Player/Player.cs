@@ -48,7 +48,10 @@ public class Player : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        
+        manager = GameObject.Find("Manager").GetComponent<GameManger>();
         weapon = GetComponent<Weapon>();
+
         currentHealth = maxHealth;
 
         cameraParent.SetActive(photonView.IsMine);
@@ -193,21 +196,23 @@ public class Player : MonoBehaviourPunCallbacks
 
     //heath and damage are integers as they take up less space and send the information faster over the internet for huge lobbys and MMO shooters.
     //changed to float due to needing it for filling the hp bar smoothly
-    internal void TakeDamage(float p_damage)
+    //BUG Errors after respawn
+
+    public void TakeDamage(float p_damage)
     {
         if (photonView.IsMine)
         {
             currentHealth -= p_damage;
             Debug.Log(currentHealth);
             HealthBar();
-        }
 
-        //DIE
-        if(currentHealth <= 0)
-        {
-            manager.Spawn();
-            PhotonNetwork.Destroy(gameObject);
-            Debug.Log("ENEMY DIED");
+            //DIE
+            if (currentHealth <= 0)
+            {
+                PhotonNetwork.Destroy(gameObject);
+                manager.Spawn();
+                Debug.Log("YOU DIED");
+            }
         }
     }
 
