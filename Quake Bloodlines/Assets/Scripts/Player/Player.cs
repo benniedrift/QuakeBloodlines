@@ -48,35 +48,39 @@ public class Player : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        
+        rig = GetComponent<Rigidbody>();
         manager = GameObject.Find("Manager").GetComponent<GameManger>();
         weapon = GetComponent<Weapon>();
 
         currentHealth = maxHealth;
 
         cameraParent.SetActive(photonView.IsMine);
+        if (photonView.IsMine)
+        {
+            hpBar = GameObject.Find("HUD/Health/Bar").transform;
+            ammoHUD = GameObject.Find("HUD/Ammo/AmmoText").GetComponent<Text>();
+        }
 
-        if(!photonView.IsMine)
+        if (!photonView.IsMine)
         {
             gameObject.layer = 12;
         }
 
         baseFOV = normalCam.fieldOfView;
+
+        
         Camera.main.enabled = false;
-        rig = GetComponent<Rigidbody>();
+        
+
+        
         weaponParentOrigin = weaponParent.localPosition;
 
-        if (photonView.IsMine)
-        {
-            hpBar = GameObject.Find("HUD/Health/Bar").transform;
-            ammoHUD = GameObject.Find("HUD/Ammo/AmmoText").GetComponent<Text>();
-            HealthBar();
-        }
+        
     }
 
     private void Update()
     {
-        if(!photonView.IsMine)
+        if (!photonView.IsMine)
         {
             return;
         }
@@ -102,20 +106,20 @@ public class Player : MonoBehaviourPunCallbacks
 
         // FOR TESTING ONLY REMOVE LATER ------------------------
         //take damage when pressing 'u'
-        if(Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.U))
         {
             TakeDamage(100);
         }
         //-------------------------------------------------------
 
         //headbob
-        if(temp_Hmove == 0 && temp_Vmove ==0)
+        if (temp_Hmove == 0 && temp_Vmove == 0)
         {
             HeadBob(idleCounter, 0.025f, 0.025f);
             idleCounter += Time.deltaTime;
             weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
         }
-        else if(!isSprinting)
+        else if (!isSprinting)
         {
             HeadBob(movementCounter, 0.035f, 0.035f);
             movementCounter += Time.deltaTime * 5;
@@ -158,10 +162,10 @@ public class Player : MonoBehaviourPunCallbacks
         temp_direction.Normalize();
 
         float temp_AdjustedSpeed = speed;
-        if(isSprinting) temp_AdjustedSpeed *= sprintModifier;
+        if (isSprinting) temp_AdjustedSpeed *= sprintModifier;
 
         Vector3 temp_targetVelocity = transform.TransformDirection(temp_direction) * temp_AdjustedSpeed * Time.deltaTime;
-        temp_targetVelocity.y = rig.velocity.y;
+        temp_targetVelocity.y = rig.velocity.y; //throws nullRefrenceExeption after respawn
         rig.velocity = temp_targetVelocity;
 
         //FOV
@@ -179,15 +183,15 @@ public class Player : MonoBehaviourPunCallbacks
 
     #region Private Methods
 
-    void HeadBob(float p_z, float p_xIntensity, float p_yIntensity)
+    private void HeadBob(float p_z, float p_xIntensity, float p_yIntensity)
     {
-        targetWeaponBobPosition = weaponParentOrigin = new Vector3 (Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z * 2) * p_yIntensity, 0);
+        targetWeaponBobPosition = weaponParentOrigin = new Vector3(Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z * 2) * p_yIntensity, 0);
     }
 
-    void HealthBar()
+    private void HealthBar()
     {
         float temp_healthRatio = currentHealth / maxHealth;
-        hpBar.localScale = Vector3.Lerp(hpBar.localScale, new Vector3(temp_healthRatio, 1, 1), Time.deltaTime * 12f);
+        hpBar.localScale = Vector3.Lerp(hpBar.localScale, new Vector3(temp_healthRatio, 1, 1), Time.deltaTime * 8f);
     }
 
     #endregion
@@ -196,7 +200,14 @@ public class Player : MonoBehaviourPunCallbacks
 
     //heath and damage are integers as they take up less space and send the information faster over the internet for huge lobbys and MMO shooters.
     //changed to float due to needing it for filling the hp bar smoothly
+
+    //--------------------------------------------------
     //BUG Errors after respawn
+    //BUG Respwns but stats not changed and left in a dead mode but able to shoot and need to reload
+    //BUG FIXED SOFT OF .... 
+    //finds ui too late now moved up...
+    //still cant move and throws errors
+    //--------------------------------------------------
 
     public void TakeDamage(float p_damage)
     {
@@ -209,9 +220,10 @@ public class Player : MonoBehaviourPunCallbacks
             //DIE
             if (currentHealth <= 0)
             {
-                PhotonNetwork.Destroy(gameObject);
                 manager.Spawn();
-                Debug.Log("YOU DIED");
+                Debug.Log("NEW SPAWN");
+                PhotonNetwork.Destroy(gameObject);
+                Debug.Log("YOU DIED - DESTROY");
             }
         }
     }
