@@ -38,6 +38,7 @@ public class Player : MonoBehaviourPunCallbacks
     private Vector3 weaponParentOrigin;
     private Transform hpBar;
     private Text ammoHUD;
+    private float aimAngle;
 
     private GameManger manager;
     private Weapon weapon;

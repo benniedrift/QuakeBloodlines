@@ -79,8 +79,7 @@ public class Weapon : MonoBehaviourPunCallbacks
     }
 
     #endregion
-
-
+     
     #region Private Methods
 
     //Coroutine for reloading
