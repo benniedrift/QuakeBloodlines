@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-//all code found on photon pun google page found here : 
+//all code found on photon pun google page found here : https://doc.photonengine.com/en-us/realtime/current/getting-started/realtime-intro
+//all info found on right side box
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
